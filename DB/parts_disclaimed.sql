@@ -1,5 +1,13 @@
-create table preftz.parts_disclaimed(
--- MH 06/22/2026 original - created for digikey
+--drop table if exists preftz.parts_disclaimed;
+
+-- Change Log:
+--EG 09/15/2026 - Initial creation of the table to store raw data.
+
+CREATE TABLE IF NOT EXISTS preftz.parts_disclaimed(
+
+parts_disclaimed_id integer primary key,
+create_date timestamptz DEFAULT now() NOT NULL,
+
 part_number TEXT,
 pga_code_array TEXT,
 hts		TEXT,
@@ -53,8 +61,9 @@ anticipated_arrival_time_at_port_of_entry	TEXT,
 inspection_or_arrival_location_code		TEXT,
 insection_or_arival_location			TEXT,
 additional_information_qualifier_code		TEXT,
-additional_information				TEXT,
-id serial primary key);
+additional_information				TEXT
+);
+
 
 
 
