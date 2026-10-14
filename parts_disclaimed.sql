@@ -3,7 +3,7 @@
 -- Change Log:
 --EG 09/15/2026 - Initial creation of the table to store raw data.
 
-create table preftz.parts_disclaimed(
+CREATE TABLE IF NOT EXISTS preftz.parts_disclaimed(
 
 parts_disclaimed_id integer primary key,
 create_date timestamptz DEFAULT now() NOT NULL,

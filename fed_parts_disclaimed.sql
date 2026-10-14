@@ -4,7 +4,7 @@
 -- Change Log:
 --EG 09/15/2026 - Initial creation of the table to store raw data.
 
-create table preftz.fed_parts_disclaimed(
+CREATE TABLE IF NOT EXISTS preftz.fed_parts_disclaimed(
 parts_disclaimed_id serial primary key,
 create_date timestamptz DEFAULT now() NOT NULL,
 fed_status varchar(10) DEFAULT 'NEW'::character varying NULL,

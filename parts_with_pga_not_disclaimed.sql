@@ -1,5 +1,3 @@
---drop view preftz.parts_with_pga_not_disclaimed;
-
 create OR REPLACE view preftz.parts_with_pga_not_disclaimed
 -- MH 07/27/2026 original - added as view to email daily
 as 

@@ -4,7 +4,7 @@
 -- Change Log:
 --EG 09/15/2026 - Initial creation of the table to store raw data.
 
-create table preftz.raw_fed_parts_disclaimed(
+CREATE TABLE IF NOT EXISTS preftz.raw_fed_parts_disclaimed(
 part_number TEXT,
 pga_code_array TEXT,
 hts		TEXT,
