@@ -1,0 +1,70 @@
+--drop table if exists preftz.parts_disclaimed;
+
+-- Change Log:
+--EG 09/15/2026 - Initial creation of the table to store raw data.
+
+create table preftz.parts_disclaimed(
+
+parts_disclaimed_id integer primary key,
+create_date timestamptz DEFAULT now() NOT NULL,
+
+part_number TEXT,
+pga_code_array TEXT,
+hts		TEXT,
+mid_key		TEXT,
+vendor_id	TEXT,
+coo_iso	TEXT,
+government_agency_code TEXT,
+government_agency_program_code TEXT,
+government_agency_processing_code TEXT,
+intended_use_code	TEXT,
+disclaimer	TEXT,
+item_type	TEXT,
+product_code_qualifier	TEXT,
+product_code_number	TEXT,
+source_type_code	TEXT,
+country_code		TEXT,
+trade_name_brand_name	TEXT,
+commodity_characteristic_description	TEXT,
+entity_role_code	TEXT,
+entity_identification_code	TEXT,
+enitity_number	TEXT,
+entity_name	TEXT,
+entity_address_1	TEXT,
+entity_address_2	TEXT,
+entity_apartment_number_suite_number	TEXT,
+entity_city	TEXT,
+entity_state_province	TEXT,
+entity_country TEXT,
+entity_zip_postal_code	TEXT,
+individual_qualifier	TEXT,
+individual_name	TEXT,
+telephone_number_of_the_individual	TEXT,
+email_address_for_the_individual	TEXT,
+affirmation_of_compliance_code		TEXT,
+affirmation_of_compliance_qualifier	TEXT,
+remarks_type_code			TEXT,
+remarks_text				TEXT,
+temperature_qualifier			TEXT,
+lot_number_qualifier			TEXT,
+lot_number				TEXT,
+pga_line_value				TEXT,
+packaging_qualifier			TEXT,
+quatity					TEXT,
+unit_of_measure				TEXT,
+container_number1	TEXT,
+container_number2	TEXT,
+container_number3	TEXT,
+anticipated_arrival_information		TEXT,
+anticipated_arrival_date_at_port_of_entry	TEXT,
+anticipated_arrival_time_at_port_of_entry	TEXT,
+inspection_or_arrival_location_code		TEXT,
+insection_or_arival_location			TEXT,
+additional_information_qualifier_code		TEXT,
+additional_information				TEXT
+);
+
+
+
+
+
