@@ -1,4 +1,16 @@
---DISCLAIM staudy
+
+
+--DISCLAIM study
+
+--new 
+table\fed_parts_disclaimed.sql
+table\raw_fed_parts_disclaimed.sql
+procedure\audit_fed_parts_disclaimed.sql
+
+--updates
+table\parts_disclaimed.sql
+
+
 
 select * from client_setup cs
 
@@ -26,6 +38,7 @@ select * from preftz.raw_fed_parts_disclaimed;
 select * from preftz.fed_parts_disclaimed;
 
 select * into preftz.parts_disclaimed_copy from preftz.parts_disclaimed;
+
 select * from preftz.parts_disclaimed;
 
 
@@ -166,6 +179,24 @@ update preftz.parts_disclaimed
 set pga_code_array = '{FD2}'
 where pga_code_array is null;
 
+select 
+*
+from preftz.parts_disclaimed_1
+where pga_code_array is null
+;
+
+select 
+*
+into preftz.parts_disclaimed_2
+from preftz.parts_disclaimed_1
+--24206
+
+select 
+*
+into preftz.parts_disclaimed_20261014
+from preftz.parts_disclaimed
+--49514
+
 
 
 --drop table preftz.parts_disclaimed_1
@@ -176,7 +207,7 @@ select
 into preftz.parts_disclaimed_1
 from preftz.parts_disclaimed--_copy
 ;
---49414
+--49514
 
 select * 
 from preftz.parts_disclaimed_1
@@ -216,7 +247,7 @@ where pga_code_array is null
 delete from preftz.parts_disclaimed_1 where pga_code_array = '{EP5,FD1}' ;
 
 update preftz.parts_disclaimed_1 set pga_code_array = 'FD2'where pga_code_array = '{FD2}' ;
---30316
+--30456
 
 --3
 
@@ -473,7 +504,7 @@ group by
 md5_v
 having count(*) >1
 ;
---3766
+--3776
 
 delete from preftz.parts_disclaimed_1 
 where id in
@@ -488,7 +519,7 @@ having count(*) >1
 ;
 
 
---5
+--step 5
 
 update preftz.parts_disclaimed_1
 set 
@@ -599,6 +630,7 @@ group by
 ,intended_use_code,  entity_role_code
 having count(*) >1
 ;
+--must be 0
 --start/6140  2/6140 4/2374 5/0
 
 
@@ -609,11 +641,43 @@ select
 ,intended_use_code,  entity_role_code
 ,* 
 from preftz.parts_disclaimed_1
---where part_number  = '5695394' --!!!!! NULL intend to use code 
+where part_number  = '14004407' --!!!!! NULL intend to use code 
+order by part_number, mid_key, entity_role_code
+;
+
+select
+ part_number , hts , mid_key , coo_iso 
+ , government_agency_code ga , government_agency_processing_code gc, government_agency_program_code gcc
+,intended_use_code,  entity_role_code
+,* 
+from preftz.parts_disclaimed_1
+where entity_name   like '%TEXAS INSTRUMENTS%'  
 order by part_number, mid_key, entity_role_code
 ;
 
 
+select
+ part_number , hts , mid_key , coo_iso 
+ , government_agency_code ga , government_agency_processing_code gc, government_agency_program_code gcc
+,intended_use_code,  entity_role_code
+,* 
+from preftz.parts_disclaimed
+where id in (49274,49285,49286,49290,49291,49295,49296,49300,49301)  
+order by part_number, mid_key, entity_role_code
+;
+
+select * into preftz.parts_disclaimed_20261015_old 
+from preftz.parts_disclaimed
+
+select * 
+--delete
+FROM preftz.parts_disclaimed_new p
+where parts_disclaimed_id in (-49274,-49285,-49286,-49290,-49291,-49295,-49296,-49300,-49301)
+
+
+select * from  preftz.parts_with_pga_not_disclaimed
+
+--DROP TABLE preftz.parts_disclaimed_old;
 
 
 select
@@ -635,7 +699,7 @@ order by sl.logid desc;
 
 select 
 part_number , pga_code_array , hts , coo_iso , vendor_id , entity_role_code  
-from preftz.parts_disclaimed
+from preftz.parts_disclaimed_1
 group by part_number , pga_code_array , hts , coo_iso , vendor_id, entity_role_code
 having count(*) >1
 ;
@@ -658,11 +722,136 @@ ORDER BY null_count DESC, column_name;
 
 select 
 * 
-from preftz.parts_disclaimed_copy
+from preftz.parts_disclaimed
 where nullif(entity_role_code,'') is null
 
 
 -------------------------------------------------------------
+select * from preftz.parts_disclaimed_new
+
+INSERT INTO preftz.parts_disclaimed_new
+(
+    parts_disclaimed_id,
+    part_number,
+    pga_code_array,
+    hts,
+    mid_key,
+    vendor_id,
+    coo_iso,
+    government_agency_code,
+    government_agency_program_code,
+    government_agency_processing_code,
+    intended_use_code,
+    disclaimer,
+    item_type,
+    product_code_qualifier,
+    product_code_number,
+    source_type_code,
+    country_code,
+    trade_name_brand_name,
+    commodity_characteristic_description,
+    entity_role_code,
+    entity_identification_code,
+    enitity_number,
+    entity_name,
+    entity_address_1,
+    entity_address_2,
+    entity_apartment_number_suite_number,
+    entity_city,
+    entity_state_province,
+    entity_country,
+    entity_zip_postal_code,
+    individual_qualifier,
+    individual_name,
+    telephone_number_of_the_individual,
+    email_address_for_the_individual,
+    affirmation_of_compliance_code,
+    affirmation_of_compliance_qualifier,
+    remarks_type_code,
+    remarks_text,
+    temperature_qualifier,
+    lot_number_qualifier,
+    lot_number,
+    pga_line_value,
+    packaging_qualifier,
+    quatity,
+    unit_of_measure,
+    container_number1,
+    container_number2,
+    container_number3,
+    anticipated_arrival_information,
+    anticipated_arrival_date_at_port_of_entry,
+    anticipated_arrival_time_at_port_of_entry,
+    inspection_or_arrival_location_code,
+    insection_or_arival_location,
+    additional_information_qualifier_code,
+    additional_information
+)
+SELECT
+    p.id*-1,
+    p.part_number,
+    p.pga_code_array,
+    p.hts,
+    p.mid_key,
+    p.vendor_id,
+    p.coo_iso,
+    p.government_agency_code,
+    p.government_agency_program_code,
+    p.government_agency_processing_code,
+    p.intended_use_code,
+    p.disclaimer,
+    p.item_type,
+    p.product_code_qualifier,
+    p.product_code_number,
+    p.source_type_code,
+    p.country_code,
+    p.trade_name_brand_name,
+    p.commodity_characteristic_description,
+    p.entity_role_code,
+    p.entity_identification_code,
+    p.enitity_number,
+    p.entity_name,
+    p.entity_address_1,
+    p.entity_address_2,
+    p.entity_apartment_number_suite_number,
+    p.entity_city,
+    p.entity_state_province,
+    p.entity_country,
+    p.entity_zip_postal_code,
+    p.individual_qualifier,
+    p.individual_name,
+    p.telephone_number_of_the_individual,
+    p.email_address_for_the_individual,
+    p.affirmation_of_compliance_code,
+    p.affirmation_of_compliance_qualifier,
+    p.remarks_type_code,
+    p.remarks_text,
+    p.temperature_qualifier,
+    p.lot_number_qualifier,
+    p.lot_number,
+    p.pga_line_value,
+    p.packaging_qualifier,
+    p.quatity,
+    p.unit_of_measure,
+    p.container_number1,
+    p.container_number2,
+    p.container_number3,
+    p.anticipated_arrival_information,
+    p.anticipated_arrival_date_at_port_of_entry,
+    p.anticipated_arrival_time_at_port_of_entry,
+    p.inspection_or_arrival_location_code,
+    p.insection_or_arival_location,
+    p.additional_information_qualifier_code,
+    p.additional_information
+FROM preftz.parts_disclaimed_1 p
+--ON CONFLICT (parts_disclaimed_id) DO nothing
+;
+
+
+
+
+
+
 
 select * 
 from preftz.receipt_classifications rc 
